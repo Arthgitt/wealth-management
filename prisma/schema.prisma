@@ -1,0 +1,100 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Transaction {
+  id          String       @id @default(uuid())
+  amount      Float
+  date        DateTime     @default(now())
+  description String?
+  allocations Allocation[]
+  createdAt   DateTime     @default(now())
+}
+
+model Allocation {
+  id            String       @id @default(uuid())
+  transactionId String
+  transaction   Transaction  @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  schemaId      String
+  amount        Float
+  savingsGoalId String?
+  savingsGoal   SavingsGoal? @relation(fields: [savingsGoalId], references: [id])
+}
+
+model SavingsGoal {
+  id            String       @id @default(uuid())
+  name          String
+  targetAmount  Float
+  currentAmount Float        @default(0)
+  deadline      DateTime?
+  color         String       @default("#10B981")
+  allocations   Allocation[]
+  dataset       String       @default("default") // For multi-tenant/user support if needed later, or just simple separation
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @unique
+  expenses  Expense[]
+  createdAt DateTime  @default(now())
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  amount      Float
+  description String
+  date        DateTime @default(now())
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+model Asset {
+  id          String   @id @default(uuid())
+  ticker      String   @unique // e.g. "AAPL", "VOO", "BTC-USD"
+  name        String?  // e.g. "Apple Inc."
+  type        String   @default("STOCK") // STOCK, ETF, CRYPTO
+  
+  // Real-time data
+  currentPrice Float?  
+  lastPriceUpdate DateTime?
+
+  // Future Schema Specifics
+  riskLevel     String    @default("HIGH") // "LOW", "MEDIUM", "HIGH", "EXTREME"
+  vestingStart  DateTime?
+  vestingMonths Int?
+
+  transactions AssetTransaction[]
+  holding      AssetHolding?
+}
+
+model AssetTransaction {
+  id          String   @id @default(uuid())
+  assetId     String
+  asset       Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  
+  type        String   // BUY, SELL, DIVIDEND
+  quantity    Float    
+  pricePerUnit Float   
+  fees        Float    @default(0)
+  date        DateTime @default(now())
+}
+
+model AssetHolding {
+  id          String   @id @default(uuid())
+  assetId     String   @unique
+  asset       Asset    @relation(fields: [assetId], references: [id])
+  
+  quantity    Float    // Total shares owned
+  avgCost     Float    // Average buy price
+  
+  updatedAt   DateTime @updatedAt
+}
