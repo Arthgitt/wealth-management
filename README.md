@@ -29,6 +29,25 @@ A comprehensive personal finance application designed to help you track expenses
 - **Risk Analysis**: Heatmaps and sentiment gauges to assess portfolio risk.
 - **Asset Projection**: "Crystal Ball" features to project future net worth based on current trajectories.
 
+## 📸 Screenshots
+
+<div align="center">
+  <img src="public/screenshots/dashboard.png" alt="Dashboard" width="800" />
+  <p><em>Financial Dashboard</em></p>
+  
+  <img src="public/screenshots/expenses.png" alt="Expenses" width="800" />
+  <p><em>Expense Tracking</em></p>
+
+  <img src="public/screenshots/savings.png" alt="Savings" width="800" />
+  <p><em>Savings Goals</em></p>
+  
+  <img src="public/screenshots/stocks.png" alt="Stocks" width="800" />
+  <p><em>Stock Portfolio</em></p>
+
+  <img src="public/screenshots/future.png" alt="Future" width="800" />
+  <p><em>Future Planning</em></p>
+</div>
+
 ## 🛠️ Tech Stack
 
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
